@@ -15,59 +15,59 @@ const UserProgressCard = ({ name, stats, color, image }) => {
       
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-slate-800/50 overflow-hidden group-hover:scale-110 transition-transform flex items-center justify-center border border-white/10">
+          <div className="w-12 h-12 rounded-xl bg-muted/50 overflow-hidden group-hover:scale-110 transition-transform flex items-center justify-center border border-foreground/10">
             {image ? (
               <img src={image} alt={name} className="w-full h-full object-cover" />
             ) : (
-              <User size={24} className="text-white" />
+              <User size={24} className="text-foreground" />
             )}
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">{name}</h3>
-            <p className="text-xs text-slate-400 font-medium">100個の目標への挑戦</p>
+            <h3 className="text-lg font-bold text-foreground">{name}</h3>
+            <p className="text-xs text-muted-foreground font-medium">100個の目標への挑戦</p>
           </div>
         </div>
         <div className="text-right">
-          <span className="text-2xl font-black text-white">{stats.completed}</span>
-          <span className="text-slate-500 text-xs ml-1">/ 100</span>
+          <span className="text-2xl font-black text-foreground">{stats.completed}</span>
+          <span className="text-muted-foreground text-xs ml-1">/ 100</span>
         </div>
       </div>
 
       <div className="space-y-4">
         {/* Created Progress */}
         <div className="space-y-1.5">
-          <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
             <div className="flex items-center gap-1">
-              <Rocket size={10} className="text-blue-400" />
+              <Rocket size={10} className="text-primary" />
               <span>目標の登録数</span>
             </div>
-            <span className="text-slate-300">{stats.created} / 100</span>
+            <span className="text-foreground/80">{stats.created} / 100</span>
           </div>
-          <div className="h-1.5 w-full bg-slate-800/50 rounded-full overflow-hidden border border-slate-700/30">
+          <div className="h-1.5 w-full bg-muted/50 rounded-full overflow-hidden border border-border/30">
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: `${createdPercentage}%` }}
               transition={{ duration: 1, ease: "easeOut" }}
-              className="h-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.3)]"
+              className="h-full bg-primary shadow-sm"
             />
           </div>
         </div>
 
         {/* Completed Progress */}
         <div className="space-y-1.5">
-          <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
             <div className="flex items-center gap-1">
-              <Trophy size={10} className="text-emerald-400" />
+              <Trophy size={10} className="text-emerald-500" />
               <span>目標の達成数</span>
             </div>
-            <span className="text-slate-300">{stats.completed} / 100</span>
+            <span className="text-foreground/80">{stats.completed} / 100</span>
           </div>
-          <div className="h-2 w-full bg-slate-800/50 rounded-full overflow-hidden border border-slate-700/30">
+          <div className="h-2 w-full bg-muted/50 rounded-full overflow-hidden border border-border/30">
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: `${completedPercentage}%` }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-              className="h-full bg-gradient-to-r from-emerald-400 to-teal-500 shadow-[0_0_12px_rgba(52,211,153,0.4)]"
+              className="h-full bg-gradient-to-r from-emerald-400 to-teal-500 shadow-sm"
             />
           </div>
         </div>
@@ -84,7 +84,7 @@ export default function Header({ userStats }) {
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-2">
             <span className="text-gradient">100 BUCKET</span> LIST
           </h1>
-          <p className="text-slate-400 text-lg md:text-xl font-medium">
+          <p className="text-muted-foreground text-lg md:text-xl font-medium">
             2人で叶える、一生モノの100個の夢。
           </p>
         </div>

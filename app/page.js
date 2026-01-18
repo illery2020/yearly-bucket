@@ -153,7 +153,7 @@ export default function Home() {
       if (item.owner === "kahoko" && !item.is_completed) {
         setEvent({
           image: "/images/kahoko_complete.jpg",
-          message: "達成おめでとう！"
+          message: "V^ ^V"
         });
       }
     } catch (error) {
@@ -207,7 +207,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen pb-10">
+    <main className={`theme-${currentUser} theme-container pb-10`}>
       <Header userStats={userStats} />
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 mb-8 flex flex-col md:flex-row gap-6 items-center justify-between">
