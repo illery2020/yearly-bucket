@@ -5,7 +5,7 @@ import { User, Trophy, Rocket } from "lucide-react";
 
 const GOAL_TARGET = 100;
 
-const UserProgressCard = ({ name, stats, color }) => {
+const UserProgressCard = ({ name, stats, color, image }) => {
   const createdPercentage = Math.min((stats.created / GOAL_TARGET) * 100, 100);
   const completedPercentage = Math.min((stats.completed / GOAL_TARGET) * 100, 100);
 
@@ -15,8 +15,12 @@ const UserProgressCard = ({ name, stats, color }) => {
       
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-slate-800/50 text-white group-hover:scale-110 transition-transform">
-            <User size={20} />
+          <div className="w-12 h-12 rounded-xl bg-slate-800/50 overflow-hidden group-hover:scale-110 transition-transform flex items-center justify-center border border-white/10">
+            {image ? (
+              <img src={image} alt={name} className="w-full h-full object-cover" />
+            ) : (
+              <User size={24} className="text-white" />
+            )}
           </div>
           <div>
             <h3 className="text-lg font-bold text-white">{name}</h3>
@@ -96,6 +100,7 @@ export default function Header({ userStats }) {
           name="かほこ" 
           stats={userStats.kahoko} 
           color="via-pink-500"
+          image="/images/kahoko_profile.jpg"
         />
       </div>
     </header>

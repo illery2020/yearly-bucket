@@ -7,6 +7,7 @@ import AddItemForm from "@/components/AddItemForm";
 import { supabase } from "@/lib/supabase";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 
 // ユーザー設定の定義
 const USER_CONFIG = [
@@ -14,11 +15,47 @@ const USER_CONFIG = [
   { id: "kahoko", displayName: "かほこ" }
 ];
 
+const EventOverlay = ({ event, onComplete }) => {
+  useEffect(() => {
+    if (event) {
+      const timer = setTimeout(() => {
+        onComplete();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [event, onComplete]);
+
+  return (
+    <AnimatePresence>
+      {event && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, y: 50 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: -50 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none p-4"
+        >
+          <div className="bg-slate-900/90 border border-blue-500/30 backdrop-blur-xl p-8 rounded-3xl shadow-[0_0_50px_rgba(59,130,246,0.3)] flex flex-col items-center gap-6 max-w-sm w-full">
+            <div className="relative w-full aspect-square overflow-hidden rounded-2xl border-4 border-white/20">
+              <img src={event.image} alt="Event" className="w-full h-full object-cover" />
+            </div>
+            <p className="text-2xl font-black text-white tracking-widest text-center">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">
+                {event.message}
+              </span>
+            </p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export default function Home() {
   const [items, setItems] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentUser, setCurrentUser] = useState(USER_CONFIG[0].id); // ID (takahiro / kahoko) で管理
   const [viewMode, setViewMode] = useState("all");
+  const [event, setEvent] = useState(null);
 
   // Load from Supabase
   useEffect(() => {
@@ -63,6 +100,14 @@ export default function Home() {
 
       if (error) throw error;
       setItems((prev) => prev.map(item => item.id === tempId ? data : item));
+
+      // Kahoko Event
+      if (currentUser === "kahoko") {
+        setEvent({
+          image: "/images/kahoko_create.jpg",
+          message: "目標作成したよ！"
+        });
+      }
     } catch (error) {
       console.error('Error adding item:', error.message);
       setItems((prev) => prev.filter(item => item.id !== tempId));
@@ -103,6 +148,14 @@ export default function Home() {
         .eq('id', id);
 
       if (error) throw error;
+
+      // Kahoko Completion Event
+      if (item.owner === "kahoko" && !item.is_completed) {
+        setEvent({
+          image: "/images/kahoko_complete.jpg",
+          message: "達成おめでとう！"
+        });
+      }
     } catch (error) {
       console.error('Error updating item:', error.message);
       setItems((prev) => prev.map(i => 
@@ -200,6 +253,8 @@ export default function Home() {
       />
       
       <AddItemForm onAdd={addItem} />
+
+      <EventOverlay event={event} onComplete={() => setEvent(null)} />
     </main>
   );
 }
