@@ -18,6 +18,12 @@ import { Input } from "@/components/ui/input";
 
 const CATEGORIES = ["General", "Travel", "Career", "Health", "Learning", "Finance"];
 
+// IDから表示用へのマッピング
+const OWNER_DISPLAY_NAMES = {
+  takahiro: "たかひろ",
+  kahoko: "かほこ"
+};
+
 export default function BucketItem({ item, onToggle, onUpdate, onDelete }) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editTitle, setEditTitle] = useState(item.title);
@@ -47,6 +53,8 @@ export default function BucketItem({ item, onToggle, onUpdate, onDelete }) {
     setIsEditDialogOpen(false);
   };
 
+  const ownerName = OWNER_DISPLAY_NAMES[item.owner] || item.owner || "不明";
+
   return (
     <motion.div
       layout
@@ -70,7 +78,7 @@ export default function BucketItem({ item, onToggle, onUpdate, onDelete }) {
             {item.owner && (
               <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-400/80">
                 <User size={12} />
-                <span>{item.owner}</span>
+                <span>{ownerName}</span>
               </div>
             )}
           </div>
