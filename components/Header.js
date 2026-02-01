@@ -95,6 +95,7 @@ export default function Header({ userStats }) {
           name="たかひろ" 
           stats={userStats.takahiro} 
           color="via-blue-500"
+          image="/images/takahiro_profile.jpg"
         />
         <UserProgressCard 
           name="かほこ" 

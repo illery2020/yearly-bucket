@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
-const CATEGORIES = ["General", "Travel", "Career", "Health", "Learning", "Finance"];
+import { CATEGORIES, CATEGORY_ICONS, CATEGORY_DISPLAY_NAMES, CATEGORY_COLORS } from "@/lib/constants";
 
 // IDから表示用へのマッピング
 const OWNER_DISPLAY_NAMES = {
@@ -54,6 +54,8 @@ export default function BucketItem({ item, onToggle, onUpdate, onDelete }) {
   };
 
   const ownerName = OWNER_DISPLAY_NAMES[item.owner] || item.owner || "不明";
+  const displayCategory = CATEGORY_DISPLAY_NAMES[item.category] || item.category || '全般';
+  const CategoryIcon = CATEGORY_ICONS[displayCategory] || CATEGORY_ICONS["全般"];
 
   return (
     <motion.div
@@ -71,9 +73,14 @@ export default function BucketItem({ item, onToggle, onUpdate, onDelete }) {
       }`}>
         <CardHeader className="p-6 pb-2 flex flex-row items-center justify-between space-y-0">
           <div className="flex flex-col gap-2">
-            <Badge variant={item.is_completed ? "secondary" : "outline"} className="w-fit flex items-center gap-1.5 px-3 py-1">
-              <Tag size={12} />
-              {item.category || 'General'}
+            <Badge 
+              variant="outline" 
+              className={`w-fit flex items-center gap-1.5 px-3 py-1 border-none shadow-sm ${
+                item.is_completed ? "bg-slate-500/10 text-slate-400" : CATEGORY_COLORS[displayCategory] || CATEGORY_COLORS["全般"]
+              }`}
+            >
+              <CategoryIcon size={12} />
+              {displayCategory}
             </Badge>
             {item.owner && (
               <div className="flex items-center gap-1.5 text-xs font-semibold text-primary">
@@ -97,11 +104,11 @@ export default function BucketItem({ item, onToggle, onUpdate, onDelete }) {
               </DialogTrigger>
               <DialogContent className="sm:max-w-md glass-panel border-border p-6">
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-bold text-foreground">Edit Goal</DialogTitle>
+                  <DialogTitle className="text-2xl font-bold text-foreground">目標を編集</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleUpdate} className="space-y-6 pt-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">Title</label>
+                    <label className="text-sm font-medium text-muted-foreground">タイトル</label>
                     <Input
                       value={editTitle}
                       onChange={(e) => setEditTitle(e.target.value)}
@@ -109,26 +116,30 @@ export default function BucketItem({ item, onToggle, onUpdate, onDelete }) {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">Category</label>
+                    <label className="text-sm font-medium text-muted-foreground">ジャンル</label>
                     <div className="flex flex-wrap gap-2">
-                      {CATEGORIES.map((cat) => (
-                        <Button
-                          key={cat}
-                          type="button"
-                          variant={editCategory === cat ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setEditCategory(cat)}
-                          className={`transition-all ${
-                            editCategory === cat ? "bg-primary text-primary-foreground" : "text-muted-foreground"
-                          }`}
-                        >
-                          {cat}
-                        </Button>
-                      ))}
+                      {CATEGORIES.map((cat) => {
+                        const Icon = CATEGORY_ICONS[cat];
+                        return (
+                          <Button
+                            key={cat}
+                            type="button"
+                            variant={editCategory === cat ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setEditCategory(cat)}
+                            className={`transition-all flex items-center gap-1.5 px-3 py-1.5 h-auto ${
+                              editCategory === cat ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+                            }`}
+                          >
+                            {Icon && <Icon size={14} />}
+                            {cat}
+                          </Button>
+                        );
+                      })}
                     </div>
                   </div>
                   <Button type="submit" className="w-full bg-primary text-primary-foreground hover:opacity-90">
-                    Save Changes
+                    変更を保存
                   </Button>
                 </form>
               </DialogContent>
@@ -147,11 +158,18 @@ export default function BucketItem({ item, onToggle, onUpdate, onDelete }) {
         </CardHeader>
 
         <CardContent className="p-6 pt-2">
-          <h3 className={`text-xl font-semibold transition-colors ${
-            item.is_completed ? "text-muted-foreground line-through decoration-muted-foreground/60" : "text-foreground"
-          }`}>
-            {item.title}
-          </h3>
+          <div className="flex items-start gap-4">
+            <div className={`mt-1 p-2 rounded-xl shrink-0 ${
+              item.is_completed ? "bg-slate-500/10 text-slate-400" : CATEGORY_COLORS[displayCategory] || CATEGORY_COLORS["全般"]
+            }`}>
+              <CategoryIcon size={24} />
+            </div>
+            <h3 className={`text-xl font-bold leading-tight transition-colors ${
+              item.is_completed ? "text-muted-foreground line-through decoration-muted-foreground/60" : "text-foreground"
+            }`}>
+              {item.title}
+            </h3>
+          </div>
         </CardContent>
 
         <CardFooter className="p-6 pt-0 flex items-center justify-between">
